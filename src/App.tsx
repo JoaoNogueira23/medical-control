@@ -33,7 +33,7 @@ function App() {
           <Box 
           sx={{
             backgroundColor: 'background.default',
-            height: 'calc(100% - 2rem)',
+            height: 'calc(100% - 4.2rem)',
             display: 'flex',
             flexDirection: 'row'
           }}

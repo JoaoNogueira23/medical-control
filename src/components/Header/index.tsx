@@ -1,7 +1,11 @@
-import { Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
+import ShortcutsField from "./ShortcutsField";
+import useAppContext from "../../hooks/useAppContext";
 
 
 export default function Header() {
+    const {darkMode} = useAppContext()
+
     return(
         <Paper
         sx={{
@@ -22,15 +26,27 @@ export default function Header() {
             style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '1rem'
+                gap: '1rem',
+                textDecoration: 'none'
             }}
             >
                 <Typography
-                color={'secondary.main'}
+                color={'info.main'}
                 >
                     {`<João Martins />`}
                 </Typography>
             </a>
+
+            <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 2
+            }}
+            >
+                <ShortcutsField />
+            </Box>
 
             
         </Paper>
