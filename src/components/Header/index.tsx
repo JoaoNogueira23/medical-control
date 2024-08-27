@@ -1,10 +1,8 @@
 import { Box, Paper, Typography } from "@mui/material";
 import ShortcutsField from "./ShortcutsField";
-import useAppContext from "../../hooks/useAppContext";
 
 
 export default function Header() {
-    const {darkMode} = useAppContext()
 
     return(
         <Paper
