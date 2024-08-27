@@ -33,7 +33,7 @@ export default function Header() {
                 <Typography
                 color={'info.main'}
                 >
-                    {`<João Martins />`}
+                    {`Medical Controll App`}
                 </Typography>
             </a>
 
