@@ -60,7 +60,7 @@ const SideBar = ({items, routes, children, ...rest}: SideBarProps & PropsWithChi
                         height: '3.2rem',
                         alignSelf: 'end',
                         transition: '.5s ease-in-out',
-                        color: darkMode ? "#fff" : 'primary.main'
+                        color: darkMode ? "#fff" : 'primary.light'
                     }}
                     >
                         {delayOpen ? <ArrowBackIosNewIcon/> : <ArrowForwardIosIcon/>}

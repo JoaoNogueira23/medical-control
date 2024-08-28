@@ -45,8 +45,8 @@ const darkPalette: PaletteOptions = {
         contrastText: palette.success?.contrastText
       },
       text: {
-        primary: palette.text?.primary,
-        secondary: palette.text?.secondary,
+        primary: palette.primary?.dark,
+        secondary: palette.secondary?.dark,
         disabled: palette.text?.disabled
       }
 }

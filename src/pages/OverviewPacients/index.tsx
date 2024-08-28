@@ -12,6 +12,7 @@ import {
     GridRowModel,
     GridRowEditStopReasons,
     GridRenderEditCellParams,
+    GridRowsProp
 } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -20,24 +21,32 @@ import CancelIcon from '@mui/icons-material/Close';
 import { Typography } from "@mui/material";
 import useSnackBar from "../../hooks/useSnackbar";
 
+interface dataType {
+  id: number;
+  lastName: string;
+  firstName: string;
+  age: number;
+  email: string;
+}
 
 export default function OverviewPacients() {
 
     const alert = useSnackBar()
     const [emails, setEmails] = useState<string[]>([])
     const [onEdit, setOnEdit] = useState<boolean>(false)
-    const [rows, setRows] = useState([
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14, isNew: false, email: 'jon.snow@email.com;joao@email.com;joao2@email.com' },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31, isNew: false, email: 'cersei.lannister@email.com' },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31, isNew: false, email: 'jaime.lannister@email.com' },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11, isNew: false, email: 'arya.stark@email.com' },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null, isNew: false, email: 'daenerys.targaryen@email.com' },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150, isNew: false, email: 'melisandre@email.com' },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44, isNew: false, email: 'ferrara.clifford@email.com' },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36, isNew: false, email: 'rossini.frances@email.com' },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65, isNew: false, email: 'roxie.harvey@email.com' },
-    ]);
-    
+    const [loading, setLoading] = useState<boolean>(false)
+    const initialRows: dataType[] = [
+      { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14, email: 'jon.snow@email.com;joao@email.com;joao2@email.com' },
+      { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31, email: 'cersei.lannister@email.com' },
+      { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31, email: 'jaime.lannister@email.com' },
+      { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11, email: 'arya.stark@email.com' },
+      { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age:15, email: 'daenerys.targaryen@email.com' },
+      { id: 6, lastName: 'Martins', firstName: 'João', age: 150, email: 'joao@email.com' },
+      { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44, email: 'ferrara.clifford@email.com' },
+      { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36, email: 'rossini.frances@email.com' },
+      { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65, email: 'roxie.harvey@email.com' },
+  ]
+    const [rows, setRows] = useState<GridRowsProp>(initialRows);
 
     const renderEditEmailInput = (params: GridRenderEditCellParams) => {
         //params.api.setEditCellValue({id: params.id, field: 'email', value: params.value})
@@ -57,8 +66,8 @@ export default function OverviewPacients() {
             headerName: 'Actions',
             width: 100,
             cellClassName: 'actions',
-            getActions: (data) => {
-              const isInEditMode = rowModesModel[data.id]?.mode === GridRowModes.Edit;
+            getActions: ({id}) => {
+              const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
       
               if (isInEditMode) {
                 return [
@@ -68,13 +77,13 @@ export default function OverviewPacients() {
                     sx={{
                       color: 'primary.main',
                     }}
-                    onClick={handleSaveClick(data.id)}
+                    onClick={handleSaveClick(id)}
                   />,
                   <GridActionsCellItem
                     icon={<CancelIcon />}
                     label="Cancel"
                     className="textPrimary"
-                    onClick={handleCancelClick(data.id)}
+                    onClick={handleCancelClick(id)}
                     color="inherit"
                   />,
                 ]; 
@@ -85,13 +94,13 @@ export default function OverviewPacients() {
                   icon={<EditIcon />}
                   label="Edit"
                   className="textPrimary"
-                  onClick={ handleEditClick(data.id)}
+                  onClick={handleEditClick(id)}
                   color="inherit"
                 />,
                 <GridActionsCellItem
                   icon={<DeleteIcon />}
                   label="Delete"
-                  onClick={handleDeleteClick(data.id)}
+                  onClick={handleDeleteClick(id)}
                   color="inherit"
                 />,
               ];
@@ -147,19 +156,17 @@ export default function OverviewPacients() {
     };
   
     const handleEditClick = (id: GridRowId) => () => {
-        console.log('clicou')
         if(!onEdit){
             setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
             setOnEdit(true)
         }else{
-            alert("è permitida apenas uma edição por vez!", {type: 'warning'})
+            alert("é permitida apenas uma edição por vez!", {type: 'info'})
         }
       
     };
   
     const handleSaveClick = (id: GridRowId) => () => {
       setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-      setOnEdit(false)
     };
   
     const handleDeleteClick = (id: GridRowId) => () => {
@@ -177,10 +184,15 @@ export default function OverviewPacients() {
     };
   
     const processRowUpdate = (newRow: GridRowModel) => {
+      setLoading(true)
       const updatedRow = { ...newRow, email: emails.join(';'), isNew: false }; 
       setEmails([])
       let rowsUpdated = rows.map(row => row.id === newRow.id ? updatedRow : row)
-      return rowsUpdated;
+      setRows(rowsUpdated)
+      setOnEdit(false)
+      setLoading(false)
+      // cuidado, precisa ser retornado a linha que está sendo atualizada, em razaõa no useCallback que o próprio MUI realiza por trás
+      return updatedRow;
     };
   
     const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -212,6 +224,7 @@ export default function OverviewPacients() {
             getRowHeight={() => 'auto'}
             editMode="row"
             rowModesModel={rowModesModel}
+            loading={loading}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
