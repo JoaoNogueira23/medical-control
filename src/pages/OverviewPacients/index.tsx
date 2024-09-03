@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { EmailInputDatagrid } from "../../components/Datagrid/EmailEditInput/inedex";
 import Page from "../../layouts/Page";
 import {
     GridRowModesModel,
@@ -11,23 +10,35 @@ import {
     GridRowId,
     GridRowModel,
     GridRowEditStopReasons,
-    GridRenderEditCellParams,
-    GridRowsProp
+    GridRowsProp,
+    GridToolbar
 } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import { Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import useSnackBar from "../../hooks/useSnackbar";
+import ModalRecordMedical from "../../components/Modal/ModalRegisterCase";
+import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 
 interface dataType {
   id: number;
-  lastName: string;
-  firstName: string;
+  name: string;
   age: number;
   email: string;
+  daysJustified: number;
+  describe?: string;
 }
+
+
+const initialRows: dataType[] = [
+  { id: 1, name: 'João Victor Nogueira Martins', age: 14, daysJustified: 2, email: 'jon.snow@email.com;joao@email.com;joao2@email.com', describe: 'Descrição' },
+  { id: 2, name: 'Lannister Cersei', age: 31, daysJustified: 5, email: 'cersei.lannister@email.com' },
+  { id: 3, name: 'Lannister Jaime', age: 32, daysJustified: 10, email: 'jaime.lannister@email.com' },
+  { id: 4, name: 'Stark Arya', age: 11, daysJustified: 3, email: 'arya.stark@email.com' },
+]
+
 
 export default function OverviewPacients() {
 
@@ -35,29 +46,9 @@ export default function OverviewPacients() {
     const [emails, setEmails] = useState<string[]>([])
     const [onEdit, setOnEdit] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
-    const initialRows: dataType[] = [
-      { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14, email: 'jon.snow@email.com;joao@email.com;joao2@email.com' },
-      { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31, email: 'cersei.lannister@email.com' },
-      { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31, email: 'jaime.lannister@email.com' },
-      { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11, email: 'arya.stark@email.com' },
-      { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age:15, email: 'daenerys.targaryen@email.com' },
-      { id: 6, lastName: 'Martins', firstName: 'João', age: 150, email: 'joao@email.com' },
-      { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44, email: 'ferrara.clifford@email.com' },
-      { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36, email: 'rossini.frances@email.com' },
-      { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65, email: 'roxie.harvey@email.com' },
-  ]
     const [rows, setRows] = useState<GridRowsProp>(initialRows);
+    const [open, setOpen] = useState<boolean>(false)
 
-    const renderEditEmailInput = (params: GridRenderEditCellParams) => {
-        //params.api.setEditCellValue({id: params.id, field: 'email', value: params.value})
-        return(
-            <EmailInputDatagrid 
-            emails={emails}
-            setEmails={setEmails}
-            value={params.value}
-            />
-        )
-    }
 
     const columns: GridColDef[] = [
         {
@@ -108,42 +99,23 @@ export default function OverviewPacients() {
           },
         { field: 'id', headerName: 'ID', width: 90 },
         {
-          field: 'firstName',
-          headerName: 'First name',
+          field: 'name',
+          headerName: 'Nome',
           width: 150,
           editable: false,
         },
         {
-          field: 'lastName',
-          headerName: 'Last name',
-          width: 150,
-          editable: false,
-        },
-        {
-          field: 'age',
-          headerName: 'Age',
+          field: 'daysJustified',
+          headerName: 'Dias em Atestado',
           type: 'number',
-          width: 110,
+          width: 150,
           editable: false,
         },
         {
-          field: 'email',
-          headerName: 'Email',
-          type: 'string',
-          width: 300,
-          editable: true,
-          renderCell: (params) => (
-            <span>{params.value}</span>
-          ),
-          renderEditCell: renderEditEmailInput
-        },
-        {
-          field: 'fullName',
-          headerName: 'Full name',
-          description: 'This column has a value getter and is not sortable.',
-          sortable: false,
-          width: 160,
-          valueGetter: (_, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+          field: 'describe',
+          headerName: 'Descrição',
+          width: 400,
+          editable: false,
         },
     ];
       
@@ -207,13 +179,37 @@ export default function OverviewPacients() {
             alignItems: 'center',
         }}
         >
-            <Typography 
+            <ModalRecordMedical 
+            open={open}
+            setOpen={setOpen}
+            />
+
+            <Box
             sx={{
-                marginTop: '2rem'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              alignItems: 'center',
+              marginTop: '2rem',
             }}
             >
-                {"Overview Pacitents"}
-            </Typography>
+              <Typography 
+              sx={{
+                  gridColumn: 'span 2'
+              }}
+              >
+                  {"Overview Pacitents"}
+              </Typography>
+
+              <Button onClick={() => setOpen(true)}
+              sx={{
+                gridColumn: 'span 1',
+                justifySelf: 'end'
+              }}
+              >
+                <ContentPasteGoIcon />
+              </Button>
+            </Box>
+           
 
             <DataGrid
             sx={{
@@ -228,6 +224,19 @@ export default function OverviewPacients() {
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
+            slots={{toolbar: GridToolbar}}
+            initialState={
+              {
+                columns:{
+                  columnVisibilityModel: {
+                    id: false
+                  }
+                },
+                sorting: {
+                  sortModel: [{ field: 'daysJustified', sort: 'desc' }],
+                },
+              }
+            }
             />
         </Page>
     )

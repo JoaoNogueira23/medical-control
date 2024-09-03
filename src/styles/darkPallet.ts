@@ -6,7 +6,7 @@ const darkPalette: PaletteOptions = {
     mode: 'dark',
     background:{
         default: "rgb(20,20,20)",
-        paper: "rgb(0,8,24)"
+        paper: "rgb(0,8,24)",
     },
     primary: {
         main: palette.primary?.main,
