@@ -24,33 +24,38 @@ import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
 
-interface dataType {
-  id: number;
-  name: string;
-  age: number;
-  emailList: string;
-  historical: string;
-  updatedAt?: string;
-  createdAt?: string;
+interface certifateMedicalType {
+    id: number;
+    name: string;
+    age: number;
+    email: string;
+    start_date: string;
+    end_date: string;
+    describe?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
+const initialRows: certifateMedicalType[] = [
+    { id: 1, name: 'João Victor Nogueira Martins', age: 14, start_date: '', end_date: '', email: 'jon.snow@email.com;joao@email.com;joao2@email.com', describe: 'Descrição' },
+    { id: 2, name: 'Lannister Cersei', age: 31, start_date: '', end_date: '', email: 'cersei.lannister@email.com' },
+    { id: 3, name: 'Lannister Jaime', age: 32, start_date: '', end_date: '', email: 'jaime.lannister@email.com' },
+    { id: 4, name: 'Stark Arya', age: 11, start_date: '', end_date: '', email: 'arya.stark@email.com' },
+  ]
 
-
-export default function OverviewPacients() {
-
+export default function CertificateMedicalPage() {
     const alert = useSnackBar()
     const [emails, setEmails] = useState<string[]>([])
     const [onEdit, setOnEdit] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
-    const [rows, setRows] = useState<GridRowsProp>([]);
+    const [rows, setRows] = useState<GridRowsProp>(initialRows);
     const [open, setOpen] = useState<boolean>(false)
     const {apiURL} = useAppContext()
 
-    const requestPacitents = () => {
+    /* const requestPacitents = () => {
       const urlRequest = apiURL + '/pacitents/data'
       axios.get(urlRequest)
           .then(response => {
-              console.log(response)
               alert("Requisição realizada com sucesso!")
               setRows(response.data.data)
           })
@@ -58,10 +63,10 @@ export default function OverviewPacients() {
               console.log(err)
               alert('Erro na requisição!', {type: 'error'})
           })
-    }
+    } */
 
     useEffect(() => {
-      requestPacitents()
+      //requestPacitents()
     }, [])
 
   
@@ -118,46 +123,27 @@ export default function OverviewPacients() {
           headerName: 'Nome',
           width: 150,
           editable: false,
-          type: 'number'
         },
         {
-          headerName: 'Altura',
-          field: 'height',
-          width: 150,
-          editable: false,
-          type: 'number'
-        },
-        {
-          headerName: 'Peso',
-          field: 'weight',
-          width: 150,
-          editable: false,
-          type: 'number',
-          renderCell: (params) => {
-            return <span>{params.value}</span>
-          }
-        },
-        {
-          headerName: 'Idade',
-          field: 'age',
-          width: 150,
-          editable: false,
-          type: 'number'
-        },
-        {
-          headerName: 'Lista de Emails',
-          field: 'emailList',
-          type: 'number',
-          width: 150,
+          field: 'start_date',
+          headerName: 'Data Inicial',
+          type: 'string',
+          width: 200,
           editable: false,
         },
         {
-          headerName: 'Histórico Médico',
-          field: 'historical',
+          field: 'end_date',
+          headerName: 'Data Final',
+          type: 'string',
+          width: 200,
+          editable: false,
+        },
+        {
+          field: 'describe',
+          headerName: 'Descrição',
           width: 400,
           editable: false,
         },
-        
     ];
       
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -220,6 +206,10 @@ export default function OverviewPacients() {
             alignItems: 'center',
         }}
         >
+            <ModalRecordMedical 
+            open={open}
+            setOpen={setOpen}
+            />
 
             <Box
             sx={{
@@ -234,8 +224,17 @@ export default function OverviewPacients() {
                   gridColumn: 'span 2'
               }}
               >
-                  {"Overview Pacitents"}
+                  {"Atestados Médicos"}
               </Typography>
+
+              <Button onClick={() => setOpen(true)}
+              sx={{
+                gridColumn: 'span 1',
+                justifySelf: 'end'
+              }}
+              >
+                <ContentPasteGoIcon />
+              </Button>
             </Box>
            
 

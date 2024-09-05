@@ -1,4 +1,4 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, Button, TextField } from "@mui/material"
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 
@@ -67,6 +67,9 @@ const pacitentsBase: pacitentType[] = [
 
 export default function FormsRecordMedical() {
     
+    // states and variables
+    const [optionsPacitent, setOptionsPacitent] = useState<optionsPacitentType[]>([])
+
     const {
         handleSubmit, 
         control, 
@@ -77,13 +80,14 @@ export default function FormsRecordMedical() {
     const onSubmit = (data: FormValues) => {
         let pacitentId = optionsPacitent.filter(obj => obj.label === data.name)[0].id
 
-        let submitedObject = {...data, id: pacitentId}
+        let submitedObject = {...data, id_pacitent: pacitentId}
 
         console.log(submitedObject)
 
     }
 
-    const [optionsPacitent, setOptionsPacitent] = useState<optionsPacitentType[]>([])
+    
+
 
     useEffect(() => {
         if(optionsPacitent.length == 0){

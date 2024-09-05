@@ -5,6 +5,7 @@ import HomePage from '../pages/Home/HomePage'
 import { RouteType } from './IRoute'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import OverviewPacients from '../pages/OverviewPacients';
+import CertificateMedicalPage from '../pages/OverviewCertificateMedical';
 
 
 const routes: RouteType[] = [
@@ -15,10 +16,16 @@ const routes: RouteType[] = [
         element: <HomePage/>
     },
     {
-        title: 'Overview Pacients',
+        title: 'Resgistro de Pacientes',
         path: '/pacients-control',
         icon: <AppRegistrationIcon />,
         element: <OverviewPacients />
+    },
+    {
+        title: 'Atestados Médicos',
+        path: '/certificate-medical',
+        icon: <AppRegistrationIcon />,
+        element: <CertificateMedicalPage />
     },
 ]
 

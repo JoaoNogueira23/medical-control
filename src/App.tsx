@@ -1,4 +1,5 @@
-import { Box, createTheme, responsiveFontSizes } from "@mui/material"
+import { createTheme, responsiveFontSizes } from "@mui/material/styles"
+import { Box } from "@mui/material"
 import  {RouterProvider} from 'react-router-dom'
 import router from "./router"
 import { SnackBarProvider } from "./components/SnackBar"
