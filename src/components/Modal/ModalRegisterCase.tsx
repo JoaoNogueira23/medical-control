@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Button } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import useAppContext from '../../hooks/useAppContext';
 import FormsRecordMedical from '../Forms/FormsRecordMedical';
 
 
@@ -14,7 +13,6 @@ type PropsModal = {
 }
 
 export default function ModalRecordMedical({open, setOpen}: PropsModal) {
-    const {darkMode} = useAppContext()
     const handleClose = () => setOpen(false);
 
     return (

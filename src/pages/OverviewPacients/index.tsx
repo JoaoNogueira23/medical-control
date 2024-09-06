@@ -17,22 +17,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import useSnackBar from "../../hooks/useSnackbar";
-import ModalRecordMedical from "../../components/Modal/ModalRegisterCase";
-import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
-
-interface dataType {
-  id: number;
-  name: string;
-  age: number;
-  emailList: string;
-  historical: string;
-  updatedAt?: string;
-  createdAt?: string;
-}
+import useDataContext from "../../hooks/useDataContext";
+import { pacitentDataType } from "../../types/dataTypes/pacitentTypes";
 
 
 
@@ -43,25 +33,43 @@ export default function OverviewPacients() {
     const [onEdit, setOnEdit] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
-    const [open, setOpen] = useState<boolean>(false)
     const {apiURL} = useAppContext()
+    const {pacitents, setPacitents, setOptionsPacitents} = useDataContext()
 
-    const requestPacitents = () => {
-      const urlRequest = apiURL + '/pacitents/data'
-      axios.get(urlRequest)
+    const requestPacitents = async () => {
+      const urlRequest = apiURL + '/pacitents/data-pacitents'
+      await axios.get(urlRequest)
           .then(response => {
-              console.log(response)
+              const tempData: pacitentDataType[] = response.data.data
               alert("Requisição realizada com sucesso!")
-              setRows(response.data.data)
+
+              if(tempData){
+                  setPacitents(tempData)
+                  setOptionsPacitents(
+                      response.data.data.map((obj: pacitentDataType) => ({
+                          label: obj.name,
+                          id: obj.id
+                      }))
+                  )
+              }
+
           })
           .catch(err => {
               console.log(err)
               alert('Erro na requisição!', {type: 'error'})
           })
+          .finally(() => setLoading(false))
     }
 
+  
+
+
     useEffect(() => {
-      requestPacitents()
+      console.log(pacitents)
+      if(pacitents.length == 0){
+          setLoading(true)
+          requestPacitents()
+      }
     }, [])
 
   
@@ -244,7 +252,7 @@ export default function OverviewPacients() {
                 width: '80vw'
             }}
             columns={columns}
-            rows={rows}
+            rows={pacitents}
             getRowHeight={() => 'auto'}
             editMode="row"
             rowModesModel={rowModesModel}

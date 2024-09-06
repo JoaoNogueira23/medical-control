@@ -1,80 +1,31 @@
-import { Autocomplete, Button, TextField } from "@mui/material"
-import { useEffect, useState } from "react";
+import { Autocomplete, Box, Button, TextField } from "@mui/material"
 import { Controller, useForm } from "react-hook-form"
 import { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from "@mui/x-date-pickers";
+import axios from "axios";
+import useSnackBar from "../../../hooks/useSnackbar";
+import useAppContext from "../../../hooks/useAppContext";
+import useDataContext from "../../../hooks/useDataContext";
 
 type FormValues = {
     name: string;
-    id: number | null;
-    daysJustified: number | null;
+    id: string;
+    id_pacitent: string;
     describe: string;
     end_date: string | null;
-    start_date: string;
+    start_date: string | null;
 }
 
-type pacitentType = {
-    name: string;
-    id: number;
-    age: number;
-    weight: number;
-    historyMedical?: string;
-    email: string;
-    height: number;
-    gender: string;
-}
-
-type optionsPacitentType = {
-    label: string;
-    id: number;
-}
-
-const pacitentsBase: pacitentType[] = [
-    {
-    id: 1,
-    name: 'João Victor Nogueira Martins', 
-    age: 24, 
-    weight: 70, 
-    email: 'jon.snow@email.com;joao@email.com;joao2@email.com', 
-    height: 1.71,
-    gender: 'masculino'
-    },
-    {
-    id: 2,
-    name: 'Lannister Cersei', 
-    age: 31, 
-    weight: 75, 
-    email: 'cersei.lannister@email.com', 
-    height: 1.72,
-    gender: 'masculino'
-    },
-    {
-    id: 2,
-    name: 'Lannister Jaime', 
-    age: 32, 
-    weight: 80, 
-    email: 'jaime.lannister@email.com', 
-    height: 1.90,
-    gender: 'masculino'
-    },
-    {
-    id: 2,
-    name: 'Stark Arya', 
-    age: 11, 
-    weight: 50, 
-    email: 'arya.stark@email.com', 
-    height: 1.50,
-    gender: 'feminino'
-    },
-  ]
 
 
 export default function FormsRecordMedical() {
     
     // states and variables
-    const [optionsPacitent, setOptionsPacitent] = useState<optionsPacitentType[]>([])
+    const {apiURL} = useAppContext()
+    const {optionsPacitents} = useDataContext()
+    const alert = useSnackBar()
 
     const {
         handleSubmit, 
@@ -85,27 +36,30 @@ export default function FormsRecordMedical() {
     }  = useForm<FormValues>()
 
     const onSubmit = (data: FormValues) => {
-        let pacitentId = optionsPacitent.filter(obj => obj.label === data.name)[0].id
+        let pacitentId = optionsPacitents.filter(obj => obj.label === data.name)[0].id
 
         let submitedObject = {...data, id_pacitent: pacitentId}
 
-        console.log(submitedObject)
+        requestCreateMedicalCertificate(submitedObject)
 
     }
 
+    const requestCreateMedicalCertificate = async (data: FormValues) => {
+        const urlRequest = apiURL + '/pacitents/add-certificate'
+        await axios.post(
+            urlRequest,
+            data
+        )
+            .then(_response => {
+                alert('Atestado cadastrado com sucesso!')
+            })
+            .catch(err => {
+                console.log(err)
+                alert('Erro no cadastramento do atestado!', {type: 'error'})
+            })
+    }
+
     
-
-
-    useEffect(() => {
-        if(optionsPacitent.length == 0){
-            const temp: optionsPacitentType[] = pacitentsBase.map(obj => ({
-                label: obj.name,
-                id: obj.id
-            }))
-
-            setOptionsPacitent(temp)
-        }
-    })
 
     return(
         <form onSubmit={handleSubmit(onSubmit)}
@@ -130,7 +84,7 @@ export default function FormsRecordMedical() {
                 return(
                     <Autocomplete 
                     disablePortal
-                    options={optionsPacitent}
+                    options={optionsPacitents}
                     sx={{
                         position: 'relative',
                         width: '40vw',
@@ -179,54 +133,57 @@ export default function FormsRecordMedical() {
            /> 
            {errors.describe && <p>{errors.describe.message}</p>}
 
-            <Controller
-            control={control}
-            name={'daysJustified'}
-            render={(_params) => {
-                return(
-                    <TextField
-                    sx={{
-                        position: 'relative',
-                        width: '40vw',
-                        justifySelf: 'center'
+            <Box>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Controller
+                    control={control}
+                    name={'start_date'}
+                    rules={{
+                        required: {
+                            value: true,
+                            message: 'Campo Obrigatório'
+                        }
                     }}
-                    autoFocus
-                    type="number"
-                    label={'Dias de Atestado'}
-                    {...register('daysJustified')}
-                    helperText={errors.daysJustified?.message}
-                    error={!!errors.daysJustified?.message}
-                    variant="standard"
-                    />
-                )
-            }}
-           /> 
-           {errors.daysJustified && <p>{errors.daysJustified.message}</p>}
-
-           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Controller
-                control={control}
-                name={'end_date'}
-                rules={{
-                    required: {
-                        value: true,
-                        message: 'Campo Obrigatório'
-                    }
-                }}
-                render={(_params) => {
-                    return(
-                        <DatePicker 
-                        label="Data Final"
-                        onChange={(date: Dayjs | null) => {
-                            setValue('end_date', date ? date.format('YYYY-MM-DD') : null)
-                        }}
-                        />
-                    )
-                
-                }}
-            /> 
-           </LocalizationProvider>
-           {errors.end_date && <p>{errors.end_date.message}</p>}
+                    render={(_params) => {
+                        return(
+                            <DatePicker 
+                            label="Data de Início"
+                            onChange={(date: Dayjs | null) => {
+                                setValue('start_date', date ? date.format('YYYY-MM-DD') : null)
+                            }}
+                            />
+                        )
+                    
+                    }}
+                /> 
+            </LocalizationProvider>
+            {errors.start_date && <p>{errors.start_date.message}</p>}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Controller
+                    control={control}
+                    name={'end_date'}
+                    rules={{
+                        required: {
+                            value: true,
+                            message: 'Campo Obrigatório'
+                        }
+                    }}
+                    render={(_params) => {
+                        return(
+                            <DatePicker 
+                            label="Data Final"
+                            onChange={(date: Dayjs | null) => {
+                                setValue('end_date', date ? date.format('YYYY-MM-DD') : null)
+                            }}
+                            />
+                        )
+                    
+                    }}
+                /> 
+            </LocalizationProvider>
+            {errors.end_date && <p>{errors.end_date.message}</p>}
+            </Box>
+           
 
            <Button type='submit' variant="contained" onClick={handleSubmit(onSubmit)}>
                 Cadastrar

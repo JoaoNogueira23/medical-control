@@ -23,15 +23,9 @@ import ModalRecordMedical from "../../components/Modal/ModalRegisterCase";
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
+import useDataContext from "../../hooks/useDataContext";
+import { pacitentDataType } from "../../types/dataTypes/pacitentTypes";
 
-interface certifateMedicalType {
-    id: number;
-    id_pacitend: number;
-    daysCertificated: number;
-    describe?: string;
-    createdAt?: string;
-    updatedAt?: string;
-}
 
 export default function CertificateMedicalPage() {
     const alert = useSnackBar()
@@ -41,22 +35,33 @@ export default function CertificateMedicalPage() {
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [open, setOpen] = useState<boolean>(false)
     const {apiURL} = useAppContext()
+    const {medicalCertificate, setMedicalCertificate} = useDataContext()
 
-    const requestCertificated = () => {
+    const requestPacitents = async () => {
+      
       const urlRequest = apiURL + '/pacitents/data-certificates'
-      axios.get(urlRequest)
+      await axios.get(urlRequest)
           .then(response => {
-              alert("Atestados resgatados com sucesso!")
-              setRows(response.data.data)
+              alert("Requisição realizada com sucesso!")
+
+              setMedicalCertificate(response.data.data)
+
           })
           .catch(err => {
               console.log(err)
               alert('Erro na requisição!', {type: 'error'})
           })
+          .finally(() => setLoading(false))
     }
 
+  
+
+
     useEffect(() => {
-      requestCertificated()
+      if(medicalCertificate.length == 0){
+          setLoading(true)
+          requestPacitents()
+      }
     }, [])
 
   
@@ -107,7 +112,7 @@ export default function CertificateMedicalPage() {
               ];
             },
           },
-        { field: 'id', headerName: 'ID', width: 90 },
+        { field: 'id', headerName: 'id', width: 90 },
         {
           field: 'name',
           headerName: 'Nome',
@@ -115,16 +120,16 @@ export default function CertificateMedicalPage() {
           editable: false,
         },
         {
-          field: 'createdAt',
+          field: 'start_date',
           headerName: 'Data Inicial',
           type: 'string',
           width: 200,
           editable: false,
         },
         {
-          field: 'daysCertificated',
-          headerName: 'Dias de Atestado',
-          type: 'number',
+          field: 'end_date',
+          headerName: 'Data Final',
+          type: 'string',
           width: 200,
           editable: false,
         },
@@ -234,7 +239,7 @@ export default function CertificateMedicalPage() {
                 width: '80vw'
             }}
             columns={columns}
-            rows={rows}
+            rows={medicalCertificate}
             getRowHeight={() => 'auto'}
             editMode="row"
             rowModesModel={rowModesModel}
