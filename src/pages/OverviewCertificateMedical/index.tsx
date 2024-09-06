@@ -26,47 +26,37 @@ import useAppContext from "../../hooks/useAppContext";
 
 interface certifateMedicalType {
     id: number;
-    name: string;
-    age: number;
-    email: string;
-    start_date: string;
-    end_date: string;
+    id_pacitend: number;
+    daysCertificated: number;
     describe?: string;
     createdAt?: string;
     updatedAt?: string;
 }
-
-const initialRows: certifateMedicalType[] = [
-    { id: 1, name: 'João Victor Nogueira Martins', age: 14, start_date: '', end_date: '', email: 'jon.snow@email.com;joao@email.com;joao2@email.com', describe: 'Descrição' },
-    { id: 2, name: 'Lannister Cersei', age: 31, start_date: '', end_date: '', email: 'cersei.lannister@email.com' },
-    { id: 3, name: 'Lannister Jaime', age: 32, start_date: '', end_date: '', email: 'jaime.lannister@email.com' },
-    { id: 4, name: 'Stark Arya', age: 11, start_date: '', end_date: '', email: 'arya.stark@email.com' },
-  ]
 
 export default function CertificateMedicalPage() {
     const alert = useSnackBar()
     const [emails, setEmails] = useState<string[]>([])
     const [onEdit, setOnEdit] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
-    const [rows, setRows] = useState<GridRowsProp>(initialRows);
+    const [rows, setRows] = useState<GridRowsProp>([]);
     const [open, setOpen] = useState<boolean>(false)
     const {apiURL} = useAppContext()
 
-    /* const requestPacitents = () => {
-      const urlRequest = apiURL + '/pacitents/data'
+    const requestCertificated = () => {
+      const urlRequest = apiURL + '/pacitents/data-certificates'
       axios.get(urlRequest)
           .then(response => {
-              alert("Requisição realizada com sucesso!")
+              alert("Atestados resgatados com sucesso!")
               setRows(response.data.data)
           })
           .catch(err => {
               console.log(err)
               alert('Erro na requisição!', {type: 'error'})
           })
-    } */
+    }
 
     useEffect(() => {
-      //requestPacitents()
+      requestCertificated()
     }, [])
 
   
@@ -125,24 +115,25 @@ export default function CertificateMedicalPage() {
           editable: false,
         },
         {
-          field: 'start_date',
+          field: 'createdAt',
           headerName: 'Data Inicial',
           type: 'string',
           width: 200,
           editable: false,
         },
         {
-          field: 'end_date',
-          headerName: 'Data Final',
-          type: 'string',
+          field: 'daysCertificated',
+          headerName: 'Dias de Atestado',
+          type: 'number',
           width: 200,
           editable: false,
         },
         {
-          field: 'describe',
-          headerName: 'Descrição',
-          width: 400,
-          editable: false,
+            field: 'describe',
+            headerName: 'Descrição',
+            type: 'string',
+            width: 300,
+            editable: false,
         },
     ];
       

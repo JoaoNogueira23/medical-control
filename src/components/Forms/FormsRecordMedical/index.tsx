@@ -1,12 +1,18 @@
 import { Autocomplete, Button, TextField } from "@mui/material"
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
+import { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from "@mui/x-date-pickers";
 
 type FormValues = {
     name: string;
     id: number | null;
     daysJustified: number | null;
     describe: string;
+    end_date: string | null;
+    start_date: string;
 }
 
 type pacitentType = {
@@ -74,6 +80,7 @@ export default function FormsRecordMedical() {
         handleSubmit, 
         control, 
         register,
+        setValue,
         formState: {errors}
     }  = useForm<FormValues>()
 
@@ -195,6 +202,31 @@ export default function FormsRecordMedical() {
             }}
            /> 
            {errors.daysJustified && <p>{errors.daysJustified.message}</p>}
+
+           <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Controller
+                control={control}
+                name={'end_date'}
+                rules={{
+                    required: {
+                        value: true,
+                        message: 'Campo Obrigatório'
+                    }
+                }}
+                render={(_params) => {
+                    return(
+                        <DatePicker 
+                        label="Data Final"
+                        onChange={(date: Dayjs | null) => {
+                            setValue('end_date', date ? date.format('YYYY-MM-DD') : null)
+                        }}
+                        />
+                    )
+                
+                }}
+            /> 
+           </LocalizationProvider>
+           {errors.end_date && <p>{errors.end_date.message}</p>}
 
            <Button type='submit' variant="contained" onClick={handleSubmit(onSubmit)}>
                 Cadastrar
