@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Button } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import FormsRecordMedical from '../Forms/FormsRecordMedical';
+import FormsResgisterPacient from '../Forms/FormsRegisterPacient';
 
 
 type PropsModal = {
@@ -12,7 +12,7 @@ type PropsModal = {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ModalRecordMedical({open, setOpen}: PropsModal) {
+export default function ModalRegistePacient({open, setOpen}: PropsModal) {
     const handleClose = () => setOpen(false);
 
     return (
@@ -50,7 +50,7 @@ export default function ModalRecordMedical({open, setOpen}: PropsModal) {
                          alignSelf: 'center'
                     }}
                     >
-                        Cadastro de Prontuário
+                        Cadastro de Paciente
                     </Typography>
 
                     <Button onClick={() => setOpen(false)}
@@ -59,15 +59,12 @@ export default function ModalRecordMedical({open, setOpen}: PropsModal) {
                         justifySelf: 'end',
                     }}
                     >
-                        <HighlightOffIcon
-                        sx={{
-                        }}
-                        />
+                        <HighlightOffIcon/>
                     </Button>
                 </Box>
 
                 <Box>
-                    <FormsRecordMedical handleClose={handleClose}/>
+                    <FormsResgisterPacient handleClose={handleClose}/>
                 </Box>
             
             </Box>

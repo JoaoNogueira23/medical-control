@@ -17,12 +17,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import useSnackBar from "../../hooks/useSnackbar";
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
 import useDataContext from "../../hooks/useDataContext";
 import { pacitentDataType } from "../../types/dataTypes/pacitentTypes";
+import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
+import ModalRegistePacient from "../../components/Modal/ModalResgisterPacitent";
 
 
 
@@ -35,6 +37,7 @@ export default function OverviewPacients() {
     const [rows, setRows] = useState<GridRowsProp>([]);
     const {apiURL} = useAppContext()
     const {pacitents, setPacitents, setOptionsPacitents} = useDataContext()
+    const [open, setOpen] = useState<boolean>(false)
 
     const requestPacitents = async () => {
       const urlRequest = apiURL + '/pacitents/data-pacitents'
@@ -54,8 +57,7 @@ export default function OverviewPacients() {
               }
 
           })
-          .catch(err => {
-              console.log(err)
+          .catch((_err) => {
               alert('Erro na requisição!', {type: 'error'})
           })
           .finally(() => setLoading(false))
@@ -229,7 +231,7 @@ export default function OverviewPacients() {
         }}
         >
 
-            <Box
+        <Box
             sx={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -239,12 +241,27 @@ export default function OverviewPacients() {
             >
               <Typography 
               sx={{
-                  gridColumn: 'span 2'
+                  gridColumn: 'span 2',
+                  
               }}
               >
-                  {"Overview Pacitents"}
+                  {"Atestados Médicos"}
               </Typography>
+
+              <Button onClick={() => setOpen(true)}
+              sx={{
+                gridColumn: 'span 1',
+                justifySelf: 'end'
+              }}
+              >
+                <ContentPasteGoIcon />
+              </Button>
             </Box>
+
+            <ModalRegistePacient 
+            open={open}
+            setOpen={(setOpen)}
+            />
            
 
             <DataGrid

@@ -18,13 +18,16 @@ type FormValues = {
     start_date: string | null;
 }
 
+type PropsModal = {
+    handleClose: () => void;
+}
 
 
-export default function FormsRecordMedical() {
+export default function FormsRecordMedical({handleClose}: PropsModal) {
     
     // states and variables
     const {apiURL} = useAppContext()
-    const {optionsPacitents} = useDataContext()
+    const {optionsPacitents, setMedicalCertificate} = useDataContext()
     const alert = useSnackBar()
 
     const {
@@ -34,6 +37,24 @@ export default function FormsRecordMedical() {
         setValue,
         formState: {errors}
     }  = useForm<FormValues>()
+
+    const requestMedicalRecords = async () => {
+      
+        const urlRequest = apiURL + '/pacitents/data-certificates'
+        await axios.get(urlRequest)
+            .then(response => {
+                alert("Requisição realizada com sucesso!")
+  
+                setMedicalCertificate(response.data.data)
+                
+                handleClose()
+            })
+            .catch(err => {
+                console.log(err)
+                alert('Erro na requisição!', {type: 'error'})
+            })
+      }
+  
 
     const onSubmit = (data: FormValues) => {
         let pacitentId = optionsPacitents.filter(obj => obj.label === data.name)[0].id
@@ -52,6 +73,7 @@ export default function FormsRecordMedical() {
         )
             .then(_response => {
                 alert('Atestado cadastrado com sucesso!')
+                requestMedicalRecords()
             })
             .catch(err => {
                 console.log(err)

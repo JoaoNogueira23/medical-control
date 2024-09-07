@@ -24,7 +24,6 @@ import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
 import useDataContext from "../../hooks/useDataContext";
-import { pacitentDataType } from "../../types/dataTypes/pacitentTypes";
 
 
 export default function CertificateMedicalPage() {
@@ -217,7 +216,8 @@ export default function CertificateMedicalPage() {
             >
               <Typography 
               sx={{
-                  gridColumn: 'span 2'
+                  gridColumn: 'span 2',
+                  
               }}
               >
                   {"Atestados Médicos"}
