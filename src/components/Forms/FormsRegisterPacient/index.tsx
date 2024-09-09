@@ -26,7 +26,7 @@ type ModalProps ={
 export default function FormsResgisterPacient({handleClose}: ModalProps) {
     
     // states and variables
-    const {apiURL} = useAppContext()
+    const {apiURL, darkMode} = useAppContext()
     const {setPacitents, setOptionsPacitents} = useDataContext()
     const alert = useSnackBar()
 
@@ -93,7 +93,7 @@ export default function FormsResgisterPacient({handleClose}: ModalProps) {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '1rem'
+            gap: '1rem',
         }}
         >
             <Controller
@@ -304,7 +304,9 @@ export default function FormsResgisterPacient({handleClose}: ModalProps) {
             {errors.historical && <p>{errors.historical.message}</p>}
            
 
-           <Button type='submit' variant="contained" onClick={handleSubmit(onSubmit)}>
+            <Button type='submit' variant="contained" onClick={handleSubmit(onSubmit)} color='info'  sx={{
+                bgcolor: '#fff'
+            }}>
                 Cadastrar
            </Button>
         </form>

@@ -26,7 +26,7 @@ function App() {
       <ThemeProvider 
       theme={responsiveFontSizes(createTheme({
         palette: darkMode ? darkPalette : lightPalette,
-        typography
+        typography,
       }))} 
       >
         <SnackBarProvider>

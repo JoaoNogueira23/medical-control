@@ -33,7 +33,7 @@ export default function CertificateMedicalPage() {
     const [loading, setLoading] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [open, setOpen] = useState<boolean>(false)
-    const {apiURL} = useAppContext()
+    const {apiURL, darkMode} = useAppContext()
     const {medicalCertificate, setMedicalCertificate} = useDataContext()
 
     const requestPacitents = async () => {
@@ -226,7 +226,8 @@ export default function CertificateMedicalPage() {
               <Button onClick={() => setOpen(true)}
               sx={{
                 gridColumn: 'span 1',
-                justifySelf: 'end'
+                justifySelf: 'end',
+                color: darkMode ? '#fff' : ''
               }}
               >
                 <ContentPasteGoIcon />

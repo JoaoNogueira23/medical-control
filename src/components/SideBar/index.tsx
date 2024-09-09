@@ -60,7 +60,7 @@ const SideBar = ({items, routes, children, ...rest}: SideBarProps & PropsWithChi
                         height: '3.2rem',
                         alignSelf: 'end',
                         transition: '.5s ease-in-out',
-                        color: darkMode ? "#fff" : 'primary.light'
+                        color: darkMode ? "primary.dark" : 'primary.light'
                     }}
                     >
                         {delayOpen ? <ArrowBackIosNewIcon/> : <ArrowForwardIosIcon/>}
@@ -83,7 +83,7 @@ const SideBar = ({items, routes, children, ...rest}: SideBarProps & PropsWithChi
                             width: open ? '16rem' : '3.2rem',
                             height: '3.2rem',
                             transition: '.4s ease-in-out',
-                            bgcolor: currentRoute === path ? 'primary.main' : 'transparent',
+                            bgcolor: currentRoute === path ? 'secondary.dark' : 'transparent',
                             color: darkMode ? '#fff' : (currentRoute === path ? '#fff' : 'primary.main'),
                             ':hover':{
                                 bgColor: currentRoute === path ? 'primary.light' : ''

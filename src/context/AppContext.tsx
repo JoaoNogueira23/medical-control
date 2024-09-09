@@ -14,7 +14,6 @@ export const AppContext = createContext<AppContextProps>({} as AppContextProps)
 export const AppProvider = ({children}: PropsWithChildren) => {
     const {darkMode, handleDarkMode} = useDarkMode();
     const originURL = appSettings.URL.origin
-    console.log(originURL)
 
     const getAPI = () => {
         if(originURL.includes('dev') || originURL.includes('localhost')){

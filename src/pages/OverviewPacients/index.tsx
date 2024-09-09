@@ -35,7 +35,7 @@ export default function OverviewPacients() {
     const [onEdit, setOnEdit] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
-    const {apiURL} = useAppContext()
+    const {apiURL, darkMode} = useAppContext()
     const {pacitents, setPacitents, setOptionsPacitents} = useDataContext()
     const [open, setOpen] = useState<boolean>(false)
 
@@ -245,13 +245,14 @@ export default function OverviewPacients() {
                   
               }}
               >
-                  {"Atestados Médicos"}
+                  {"Visão Geral Pacientes"}
               </Typography>
 
               <Button onClick={() => setOpen(true)}
               sx={{
                 gridColumn: 'span 1',
-                justifySelf: 'end'
+                justifySelf: 'end',
+                color: darkMode ? '#fff' : ''
               }}
               >
                 <ContentPasteGoIcon />

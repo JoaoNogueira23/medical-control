@@ -9,37 +9,37 @@ const darkPalette: PaletteOptions = {
         paper: "rgb(0,8,24)",
     },
     primary: {
-        main: palette.primary?.main,
+        main: palette.primary?.dark,
         light: palette.primary?.light,
         dark: palette.primary?.dark,
         contrastText: palette.primary?.contrastText
       },
       secondary: {
-        main: palette.secondary?.main,
+        main: palette.secondary?.dark,
         light: palette.secondary?.light,
         dark: palette.secondary?.dark,
         contrastText: palette.secondary?.contrastText
       },
       error: {
-        main: palette.error?.main,
+        main: palette.error?.dark,
         light: palette.error?.light,
         dark: palette.error?.dark,
         contrastText: palette.error?.contrastText
       },
       warning: {
-        main: palette.warning?.main,
+        main: palette.warning?.dark,
         light: palette.warning?.light,
         dark: palette.warning?.dark,
         contrastText: palette.warning?.contrastText
       },
       info: {
-        main: palette.info?.main,
+        main: palette.info?.dark,
         light: palette.info?.light,
         dark: palette.info?.dark,
         contrastText: palette.info?.contrastText
       },
       success: {
-        main: palette.success?.main,
+        main: palette.success?.dark,
         light: palette.success?.light,
         dark: palette.success?.dark,
         contrastText: palette.success?.contrastText
