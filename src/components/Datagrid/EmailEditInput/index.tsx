@@ -25,7 +25,7 @@ export function EmailInputDatagrid({value='', emails, setEmails}: PropsComponent
     }
 
     const handleAddEmail = () => {
-        !validateEmail(email) ? alert("Invalid E-mail!", {type: 'warning'}) : ''
+        !validateEmail(email) ? alert("E-mail inválido!", {type: 'warning'}) : ''
         if(email && !emails.includes(email) && validateEmail(email)){
             setEmails([...emails, email])
             setEmail('')
@@ -33,14 +33,22 @@ export function EmailInputDatagrid({value='', emails, setEmails}: PropsComponent
     }
 
     useEffect(() => {
+        
         let arrayEmails = value.split(';')
         setEmails(arrayEmails)
     }, [])
 
 
+
     return(
         <Stack
         spacing={0.5}
+        sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignContent: 'center'
+        }}
         >   
             {emails.map((email, key) => (
                 <Chip

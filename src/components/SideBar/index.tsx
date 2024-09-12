@@ -6,6 +6,7 @@ import { RouteType } from '../../router/IRoute';
 import { Box, BoxProps, Button, Divider, Typography } from '@mui/material';
 import useAppContext from '../../hooks/useAppContext';
 import { ArrowBackIosNew as ArrowBackIosNewIcon, ArrowForwardIos as ArrowForwardIosIcon } from '@mui/icons-material';
+import ShortcutsField from '../Header/ShortcutsField';
 
 
 
@@ -135,6 +136,15 @@ const SideBar = ({items, routes, children, ...rest}: SideBarProps & PropsWithChi
                     </ToolTip>
                 ))
             }
+
+            <Divider/>
+            <ToolTip 
+            key='dark-mode-handle' 
+            disableHoverListener={open} 
+            title={'Mudança de Tema'} 
+            >
+                <ShortcutsField open={open}/>
+            </ToolTip>
             {children}
         </Box>
     )

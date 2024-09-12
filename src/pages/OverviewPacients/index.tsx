@@ -17,7 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import useSnackBar from "../../hooks/useSnackbar";
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
@@ -25,8 +25,13 @@ import useDataContext from "../../hooks/useDataContext";
 import { pacitentDataType } from "../../types/dataTypes/pacitentTypes";
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import ModalRegistePacient from "../../components/Modal/ModalResgisterPacitent";
+import { EmailInputDatagrid } from "../../components/Datagrid/EmailEditInput";
+import { RefreshOutlined } from "@mui/icons-material";
 
-
+type PacitentEditRequest = {
+  id: string;
+  emailList: string;
+}
 
 export default function OverviewPacients() {
 
@@ -39,8 +44,12 @@ export default function OverviewPacients() {
     const {pacitents, setPacitents, setOptionsPacitents} = useDataContext()
     const [open, setOpen] = useState<boolean>(false)
 
+    // states custom email edit input
+
     const requestPacitents = async () => {
+      setLoading(true)
       const urlRequest = apiURL + '/pacitents/data-pacitents'
+      console.log(urlRequest)
       await axios.get(urlRequest)
           .then(response => {
               const tempData: pacitentDataType[] = response.data.data
@@ -63,16 +72,39 @@ export default function OverviewPacients() {
           .finally(() => setLoading(false))
     }
 
+    const requestEditPacitent = async (data: PacitentEditRequest) => {
+      setLoading(true)
+      const urlRequest = apiURL + '/pacitents/edit-pacitent'
+      await axios.put(urlRequest, data)
+        .then(_response => {
+          alert('Registro atualizado com sucesso!')
+          requestPacitents()
+        })
+        .catch((_err) => {
+          alert('Erro na atualização de resgitro!', {type: 'error'})
+      })
+      .finally(() => setLoading(false))
+
+    }
+
   
 
 
     useEffect(() => {
-      console.log(pacitents)
       if(pacitents.length == 0){
-          setLoading(true)
           requestPacitents()
       }
     }, [])
+
+    const renderEditEmailInput = (emailList: string) => {
+      return(
+        <EmailInputDatagrid 
+          emails={emails}
+          setEmails={setEmails}
+          value={emailList}
+        />
+      )
+    }
 
   
     const columns: GridColDef[] = [
@@ -121,26 +153,30 @@ export default function OverviewPacients() {
                 />,
               ];
             },
-          },
+        },
         { field: 'id', headerName: 'ID', width: 90 },
         {
           field: 'name',
           headerName: 'Nome',
           width: 250,
           editable: false,
-          type: 'number'
+          headerAlign: 'center',
+          type: 'string',
+          align: 'center',
         },
         {
           headerName: 'Altura',
           field: 'height',
           width: 80,
           editable: false,
+          headerAlign: 'center',
           type: 'number'
         },
         {
           headerName: 'Peso',
           field: 'weight',
           width: 80,
+          headerAlign: 'center',
           editable: false,
           type: 'number',
           renderCell: (params) => {
@@ -152,18 +188,28 @@ export default function OverviewPacients() {
           field: 'age',
           width: 80,
           editable: false,
+          headerAlign: 'center',
           type: 'number'
         },
         {
           headerName: 'Lista de Emails',
           field: 'emailList',
-          type: 'number',
+          type: 'string',
           width: 300,
-          editable: false,
+          headerAlign: 'center',
+          editable: true,
+          align: 'center',
+          renderCell: (params) => {
+            return <span>{params.value}</span>
+          },
+          renderEditCell: (params) => renderEditEmailInput(params.value)
         },
         {
           headerName: 'Histórico Médico',
           field: 'historical',
+          align: 'center',
+          headerAlign: 'center',
+          type: 'string',
           width: 400,
           editable: false,
         },
@@ -210,8 +256,11 @@ export default function OverviewPacients() {
       setLoading(true)
       const updatedRow = { ...newRow, email: emails.join(';'), isNew: false }; 
       setEmails([])
-      let rowsUpdated = rows.map(row => row.id === newRow.id ? updatedRow : row)
-      setRows(rowsUpdated)
+      let dataPayload = {
+        id: newRow.id,
+        emailList: emails.join(';')
+      }
+      requestEditPacitent(dataPayload)
       setOnEdit(false)
       setLoading(false)
       // cuidado, precisa ser retornado a linha que está sendo atualizada, em razaõa no useCallback que o próprio MUI realiza por trás
@@ -233,30 +282,48 @@ export default function OverviewPacients() {
 
         <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              alignItems: 'center',
+              display: 'flex',
+              width: '80vw',
               marginTop: '2rem',
+              gap: 4,
+              justifyContent: 'space-between',
             }}
             >
-              <Typography 
-              sx={{
-                  gridColumn: 'span 2',
-                  
-              }}
-              >
-                  {"Visão Geral Pacientes"}
-              </Typography>
 
-              <Button onClick={() => setOpen(true)}
-              sx={{
-                gridColumn: 'span 1',
-                justifySelf: 'end',
-                color: darkMode ? '#fff' : ''
-              }}
-              >
-                <ContentPasteGoIcon />
-              </Button>
+                <Typography 
+                fontWeight={500}
+                >
+                    {"Visão Geral Pacientes"}
+                </Typography>
+
+                <Box
+                sx={{
+                  alignSelf: 'flex-end'
+                }}
+                >
+                  <Tooltip title={'Cadastro de novos pacientes'}>
+                    <Button onClick={() => setOpen(true)}
+                    sx={{
+                      gridColumn: 'span 1',
+                      justifySelf: 'end',
+                      color: darkMode ? '#fff' : ''
+                    }}
+                    >
+                      <ContentPasteGoIcon />
+                    </Button>
+                  </Tooltip>
+                  
+                  <Tooltip
+                  title={'Atualização de dados'}
+                  >
+                    <Button onClick={() => requestPacitents()}>
+                      <RefreshOutlined />
+                    </Button>
+                  </Tooltip>
+                  
+                </Box>
+              
+              
             </Box>
 
             <ModalRegistePacient 
@@ -267,7 +334,8 @@ export default function OverviewPacients() {
 
             <DataGrid
             sx={{
-                width: '80vw'
+                width: '80vw',
+                marginBottom: '2rem'
             }}
             columns={columns}
             rows={pacitents}
