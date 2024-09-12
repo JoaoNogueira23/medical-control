@@ -276,12 +276,6 @@ export default function FormsResgisterPacient({handleClose}: ModalProps) {
             <Controller
                 control={control}
                 name={'historical'}
-                rules={{
-                    required: {
-                        value: true,
-                        message: 'Campo Obrigatório'
-                    }
-                }}
                 render={(_params) => {
                     return(
                         <TextField

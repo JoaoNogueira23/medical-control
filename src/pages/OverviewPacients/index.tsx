@@ -126,21 +126,21 @@ export default function OverviewPacients() {
         {
           field: 'name',
           headerName: 'Nome',
-          width: 150,
+          width: 250,
           editable: false,
           type: 'number'
         },
         {
           headerName: 'Altura',
           field: 'height',
-          width: 150,
+          width: 80,
           editable: false,
           type: 'number'
         },
         {
           headerName: 'Peso',
           field: 'weight',
-          width: 150,
+          width: 80,
           editable: false,
           type: 'number',
           renderCell: (params) => {
@@ -150,7 +150,7 @@ export default function OverviewPacients() {
         {
           headerName: 'Idade',
           field: 'age',
-          width: 150,
+          width: 80,
           editable: false,
           type: 'number'
         },
@@ -158,7 +158,7 @@ export default function OverviewPacients() {
           headerName: 'Lista de Emails',
           field: 'emailList',
           type: 'number',
-          width: 150,
+          width: 300,
           editable: false,
         },
         {
