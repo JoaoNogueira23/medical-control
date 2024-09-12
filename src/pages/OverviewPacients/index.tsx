@@ -49,7 +49,6 @@ export default function OverviewPacients() {
     const requestPacitents = async () => {
       setLoading(true)
       const urlRequest = apiURL + '/pacitents/data-pacitents'
-      console.log(urlRequest)
       await axios.get(urlRequest)
           .then(response => {
               const tempData: pacitentDataType[] = response.data.data
