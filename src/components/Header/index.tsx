@@ -33,6 +33,7 @@ export default function Header() {
             >
                 <Typography
                 color={darkMode ? '#fff' : '#252525'}
+                fontWeight={700}
                 >
                     {`Medical Controll App`}
                 </Typography>

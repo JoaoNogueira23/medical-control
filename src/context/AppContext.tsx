@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren } from "react";
 import useDarkMode from "../hooks/useDarkMode";
 import { appSettings } from "../settings/AppSetting";
+import { env } from "../settings/env";
 
 interface AppContextProps {
     darkMode: boolean,
@@ -18,10 +19,16 @@ export const AppProvider = ({children}: PropsWithChildren) => {
     const getAPI = () => {
         if(originURL.includes('dev') || originURL.includes('localhost')){
             return{
-                url: 'http://localhost:3000',
+                url: env.VITE_API_URL,
                 key: ''
             }
-        }else{
+        }else if(originURL.includes('medical-control')){
+            return{
+                url: env.VITE_API_URL,
+                key: ''
+            }
+        }
+        else{
             throw new Error(`Não foi possível detectar a origem do servidor: "${originURL}"`)
         }
     }

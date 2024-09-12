@@ -26,7 +26,7 @@ type ModalProps ={
 export default function FormsResgisterPacient({handleClose}: ModalProps) {
     
     // states and variables
-    const {apiURL, darkMode} = useAppContext()
+    const {apiURL} = useAppContext()
     const {setPacitents, setOptionsPacitents} = useDataContext()
     const alert = useSnackBar()
 

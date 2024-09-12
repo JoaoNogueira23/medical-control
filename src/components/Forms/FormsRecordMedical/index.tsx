@@ -207,7 +207,9 @@ export default function FormsRecordMedical({handleClose}: PropsModal) {
             </Box>
            
 
-           <Button type='submit' variant="contained" onClick={handleSubmit(onSubmit)}>
+           <Button type='submit' variant="contained" onClick={handleSubmit(onSubmit)} color='info' sx={{
+            bgcolor: '#fff'
+           }}>
                 Cadastrar
            </Button>
         </form>
