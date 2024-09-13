@@ -11,10 +11,13 @@ O objetivo é desenvolver um web app que forneça funcionalidades para cadastro 
 A ideia surgiu após uma conversa informal com um amigo médico que estava sentindo uma extrema necessidade de um<br>
 sistema que ele pudesse gerenciar os seus prontuários para ter um ganho de eficiência e gerenciamento dos seus atendimentos no hospital no qual ele trabalha.
 
+## Tecnologias
 As tecnologias escolhidas foram Typescript e o MUI para o uso de componentes personalizados.
 
 O objetivo desse projeto é também contruir um template próprio de uma aplicação com MUI, uma lib que já usei bastante em uma primeira experiência profissional.
+
 ## Status
-Ainda em desenvolvimento
+Em produção no
+<a herf="https://medical-control-app.vercel.app/" target="_blank" style="cursor: pointer">link</a>
 
 
