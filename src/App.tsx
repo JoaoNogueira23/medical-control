@@ -3,7 +3,6 @@ import { Box } from "@mui/material"
 import  {RouterProvider} from 'react-router-dom'
 import router from "./router"
 import { SnackBarProvider } from "./components/SnackBar"
-import Header from "./components/Header"
 
 import { ThemeProvider } from "@emotion/react"
 import useAppContext from "./hooks/useAppContext"
@@ -30,11 +29,11 @@ function App() {
       }))} 
       >
         <SnackBarProvider>
-          <Header />
           <Box 
           sx={{
             backgroundColor: 'background.default',
-            height: 'calc(100% - 4.2rem)',
+            width: '100vw',
+            height: '100vh',
             display: 'flex',
             flexDirection: 'row'
           }}

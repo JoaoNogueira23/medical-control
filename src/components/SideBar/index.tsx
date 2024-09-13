@@ -1,11 +1,9 @@
 import ToolTip from '@mui/material/Tooltip'
 import { PropsWithChildren, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useDebounce from '../../hooks/useDebounce';
 import { RouteType } from '../../router/IRoute';
 import { Box, BoxProps, Button, Divider, Typography } from '@mui/material';
 import useAppContext from '../../hooks/useAppContext';
-import { ArrowBackIosNew as ArrowBackIosNewIcon, ArrowForwardIos as ArrowForwardIosIcon } from '@mui/icons-material';
 import ShortcutsField from '../Header/ShortcutsField';
 
 
@@ -19,115 +17,66 @@ interface SidedBarItem {
 interface SideBarProps extends BoxProps{
     items?: SidedBarItem[]
     routes?: RouteType[]
+    mobileDevice: boolean,
+    handleMenu: () => void
 }
 
-const SideBar = ({items, routes, children, ...rest}: SideBarProps & PropsWithChildren) => {
-    const [open, setOpen] = useState<boolean>(true)
+const SideBar = ({items, routes, mobileDevice, handleMenu, children, ...rest}: SideBarProps & PropsWithChildren) => {
     const [currentRoute, setCurrentRoute] = useState(window.location.pathname)
 
     const navigate = useNavigate()
-    const delayOpen = useDebounce<boolean>(open, 400)
 
     const {darkMode} = useAppContext()
-
-    const handleToggleOpen = () => {
-        setOpen((prevOpen) => !prevOpen)
-    }
 
     const handleSetRoute = (newRoute: string) => {
         setCurrentRoute(newRoute)
         navigate(newRoute)
+        handleMenu()
+    }
+
+    const styleMobile = {
+        height: "3vh",
+        width: '100vw',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'absolute',
+        top: '6.2rem',
+        backgroundColor: darkMode ? '#0D1524' : '#F0F0F0',
+        gap:2,
+        textAlign: 'center'
+    }
+
+    const stylePattern = {
+        height: "5rem",
+        display: 'flex',
+        flexDirection:  'row',
+        gap:4,
+        paddingRight: '2.5rem'
     }
 
     return(
         <Box
-        sx={{
-            height: "calc(100% -  2rem)",
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'left',
-            padding: 2,
-            gap:1,
-            backgroundColor: darkMode ? 'rgb(25,25,25)' : "rgb(240,240,240)"
-        }}
-        {...rest}
+        sx={mobileDevice ? styleMobile : stylePattern}
         >
             {
-                <ToolTip title={delayOpen ? "Close Side Bar" : "Open Side Bar"} placement='right'>
-                    <Button
-                    onClick={handleToggleOpen}
-                    sx={{
-                        width: "3.2rem",
-                        height: '3.2rem',
-                        alignSelf: 'end',
-                        transition: '.5s ease-in-out',
-                        color: darkMode ? "primary.dark" : 'primary.light'
-                    }}
-                    >
-                        {delayOpen ? <ArrowBackIosNewIcon/> : <ArrowForwardIosIcon/>}
-                    </Button>
-                </ToolTip>
-            }
-
-            <Divider sx={{width: '100%'}}/>
-
-            {
                 routes && routes.map(({title, icon, path}, key) => (
-                    <ToolTip key={key} disableHoverListener={open} title={title} placement='right'>
+                    <ToolTip key={key} title={title}>
                         <Button
                         onClick={() => currentRoute != path && handleSetRoute(path ?? '/')}
                         sx={{
                             display: 'flex',
-                            justifyContent: 'left',
-                            px: 2.4,
-                            gap: 2,
-                            width: open ? '16rem' : '3.2rem',
-                            height: '3.2rem',
-                            transition: '.4s ease-in-out',
+                            justifyContent: 'center',
                             bgcolor: currentRoute === path ? 'secondary.dark' : 'transparent',
                             color: darkMode ? '#fff' : (currentRoute === path ? '#fff' : 'primary.main'),
-                            ':hover':{
-                                bgColor: currentRoute === path ? 'primary.light' : ''
-                            },
-                            textTransform: 'none'
+                            textTransform: 'none',
                         }}
                         >   
-                        {icon}
                         <Typography
                         sx={{
-                            display: open ? (
-                                delayOpen ? 'block' : 'none'
-                            ) : 'none',
-                            textAlign: 'left',
+                            display: 'block',
                             whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            width: '12rem'
-                        }}
-                        >
-                            {title}
-                        </Typography>
-                        </Button>
-                    </ToolTip>
-                ))
-            }
-            {
-                items && items.map(({title, icon, action}, key) => (
-                    <ToolTip key={key} disableHoverListener={open} title={title} placement='right'>
-                        <Button
-                        onClick={action}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: open ? 'left' : 'center',
-                            gap: 2,
-                            width: open ? '16rem' : '3.2rem',
-                            transition: '.5s ease-in-out'
-                        }}
-                        >   
-                        {icon}
-                        <Typography
-                        sx={{
-                            display: open ? 'block' : 'none',
-                            transition: '.5s ease-in-out'
+                            fontWeight: 600,
                         }}
                         >
                             {title}
@@ -137,14 +86,10 @@ const SideBar = ({items, routes, children, ...rest}: SideBarProps & PropsWithChi
                 ))
             }
 
-            <Divider/>
-            <ToolTip 
-            key='dark-mode-handle' 
-            disableHoverListener={open} 
-            title={'Mudança de Tema'} 
-            >
-                <ShortcutsField open={open}/>
-            </ToolTip>
+            <Divider orientation={mobileDevice ? 'horizontal' : 'vertical'} sx={{
+                width: mobileDevice ? '100%' : ''
+            }} />
+            <ShortcutsField />
             {children}
         </Box>
     )

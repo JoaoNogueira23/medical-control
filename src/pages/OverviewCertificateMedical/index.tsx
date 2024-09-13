@@ -87,6 +87,7 @@ export default function CertificateMedicalPage() {
             flexDirection: 'column',
             gap: '1rem',
             alignItems: 'center',
+            height: '100vh',
         }}
         >
             <ModalRecordMedical 
@@ -104,7 +105,7 @@ export default function CertificateMedicalPage() {
             }}
             >
               <Typography 
-              fontWeight={500}
+              fontWeight={700}
               >
                   {"Atestados Médicos"}
               </Typography>
@@ -129,7 +130,8 @@ export default function CertificateMedicalPage() {
 
             <DataGrid
             sx={{
-                width: '80vw'
+                width: '80vw',
+                marginBottom: '2rem'
             }}
             columns={columns}
             rows={medicalCertificate}

@@ -276,13 +276,13 @@ export default function OverviewPacients() {
             flexDirection: 'column',
             gap: '1rem',
             alignItems: 'center',
+            height: '100vh',
         }}
         >
 
         <Box
             sx={{
               display: 'flex',
-              width: '80vw',
               marginTop: '2rem',
               gap: 4,
               justifyContent: 'space-between',
@@ -290,7 +290,7 @@ export default function OverviewPacients() {
             >
 
                 <Typography 
-                fontWeight={500}
+                fontWeight={700}
                 >
                     {"Visão Geral Pacientes"}
                 </Typography>
@@ -334,7 +334,7 @@ export default function OverviewPacients() {
             <DataGrid
             sx={{
                 width: '80vw',
-                marginBottom: '2rem'
+                marginBottom: '3.2rem'
             }}
             columns={columns}
             rows={pacitents}

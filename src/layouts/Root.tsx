@@ -1,13 +1,18 @@
-import SideBar from "../components/SideBar";
 import { Outlet } from "react-router-dom";
-import routes from "../router/routes";
+import { Stack } from "@mui/material";
+import Header from "../components/Header";
 
 
 export default function Root(){
     return(
-        <>
-            <SideBar routes={routes} />
+        <Stack
+        sx={{
+            display: 'flex',
+            flexDirection: 'column'
+        }}
+        >
+            <Header />
             <Outlet />
-        </>
+        </Stack>
     )
 }

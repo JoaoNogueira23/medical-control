@@ -1,11 +1,31 @@
-import { Box, Paper, Typography } from "@mui/material";
-import ShortcutsField from "./ShortcutsField";
+import { IconButton, Paper, Typography } from "@mui/material";
 import useAppContext from "../../hooks/useAppContext";
+import SideBar from "../SideBar";
+import routes from "../../router/routes";
+import { useState } from "react";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 export default function Header() {
 
     const {darkMode} = useAppContext()
+
+    const [currentWindow, setCurrentWindow] = useState<number>(window.innerWidth)
+    const [openMenu, setOpenMenu] = useState<boolean>(false)
+
+    const resizeWindow = () => {
+        setCurrentWindow(window.innerWidth)
+        console.log(window.innerWidth)
+    }
+
+    window.addEventListener('resize', () => {
+        resizeWindow()
+    })
+
+    const handleMenu = () => {
+        setOpenMenu((prev) => !prev)
+    }
 
     return(
         <Paper
@@ -16,8 +36,7 @@ export default function Header() {
             justifyContent: 'space-between',
             alignItems: 'center',
             height: '3.2rem',
-            px: '2.5rem',
-            py: '.5rem',
+            py: '2rem',
             borderRadius: 0,
             boxShadow: 'rgba(0,0,0,0.12) 0px 1px 3px, rgba(0,0,0,0.24) 0px 1px 2px'
         }}
@@ -28,6 +47,7 @@ export default function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1rem',
+                paddingLeft: '2.5rem',
                 textDecoration: 'none'
             }}
             >
@@ -39,16 +59,35 @@ export default function Header() {
                 </Typography>
             </a>
 
-            <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 2
-            }}
-            >
-                <ShortcutsField />
-            </Box>
+            {
+                currentWindow <= 720 ? 
+                (
+                    <>
+                        <IconButton onClick={handleMenu}
+                        sx={{
+                            px: '2.5rem'
+                        }}
+                        >
+                            {openMenu ? <CloseIcon/> : <MenuIcon /> }
+                        </IconButton>
+                        {openMenu ? 
+                        (
+  
+                            <SideBar routes={routes} mobileDevice={true} handleMenu={handleMenu}/>
+                            
+                        ) :
+                        ('')
+                        }
+                        
+                    </>
+                    
+                )  
+                : 
+                (
+                    <SideBar routes={routes} mobileDevice={false} handleMenu={handleMenu}/>
+                )
+            }
+            
 
             
         </Paper>

@@ -27,10 +27,10 @@ export default function ModalRegistePacient({open, setOpen}: PropsModal) {
                 <Box 
                 sx={{
                     position: 'absolute',
-                    top: '20%',
-                    left: '20vw',
+                    top: window.innerWidth <= 700 ? '.5vh' : '20vh',
+                    left: '18vw',
                     transform: 'translate(-50%, -50%)',
-                    width: { xs: '90vw', sm: '70vw', md: '60vw' },
+                    width: { xs: '50vw', sm: '70vw', md: '60vw' },
                     bgcolor: 'rgb(118,164,201)',
                     border: '2px solid rgb(118,164,201)',
                     boxShadow: 24,
