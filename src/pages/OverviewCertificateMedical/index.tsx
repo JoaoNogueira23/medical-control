@@ -34,7 +34,7 @@ export default function CertificateMedicalPage() {
           })
           .catch(err => {
               console.log(err)
-              alert('Erro na requisição!', {type: 'error'})
+              alert('Erro no carregamentos dos atestados!', {type: 'error'})
           })
           .finally(() => setLoading(false))
     }
