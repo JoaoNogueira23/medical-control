@@ -35,7 +35,7 @@ const SideBar = ({routes, mobileDevice, handleMenu, children}: SideBarProps & Pr
     }
 
     const styleMobile = {
-        height: "3vh",
+        height: "30vh",
         width: '100vw',
         display: 'flex',
         flexDirection: 'column',
@@ -44,7 +44,8 @@ const SideBar = ({routes, mobileDevice, handleMenu, children}: SideBarProps & Pr
         top: '6.2rem',
         backgroundColor: darkMode ? '#0D1524' : '#F0F0F0',
         gap:2,
-        textAlign: 'center'
+        textAlign: 'center',
+        zIndex: '100'
     }
 
     const stylePattern = {

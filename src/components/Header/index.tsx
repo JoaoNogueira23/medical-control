@@ -16,7 +16,6 @@ export default function Header() {
 
     const resizeWindow = () => {
         setCurrentWindow(window.innerWidth)
-        console.log(window.innerWidth)
     }
 
     window.addEventListener('resize', () => {
@@ -31,7 +30,7 @@ export default function Header() {
         <Paper
         sx={{
             zIndex: 1,
-            background: 'backgroud.paper',
+            background: 'background.paper',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -60,7 +59,7 @@ export default function Header() {
             </a>
 
             {
-                currentWindow <= 720 ? 
+                currentWindow <= 800 ? 
                 (
                     <>
                         <IconButton onClick={handleMenu}

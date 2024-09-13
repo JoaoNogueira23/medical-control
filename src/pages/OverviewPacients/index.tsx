@@ -279,32 +279,46 @@ export default function OverviewPacients() {
             height: '100vh',
         }}
         >
-
-        <Box
-            sx={{
-              display: 'flex',
-              marginTop: '2rem',
-              gap: 4,
-              justifyContent: 'space-between',
-            }}
-            >
-
-                <Typography 
-                fontWeight={700}
-                >
-                    {"Visão Geral Pacientes"}
-                </Typography>
-
+          <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr',
+            width: '80vw',
+            marginTop: '2rem',
+            gap: 4,
+            justifyContent: 'space-between',
+            alignContent: 'center',
+            alignItems: 'center'
+          }}
+          >
                 <Box
                 sx={{
-                  alignSelf: 'flex-end'
+                  gridColumn: '1/4',
+                  gridRow: '2/2'
+                }}
+                >
+                  <Typography 
+                  fontWeight={700}
+                  align='center'
+                  variant='h5'
+                  >
+                      {"Visão Geral Pacientes"}
+                  </Typography>
+
+                </Box>
+               
+                <Box
+                sx={{
+                  gridColumn: '3',
+                  gridRow: '2/2',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  gap: 1,  
                 }}
                 >
                   <Tooltip title={'Cadastro de novos pacientes'}>
                     <Button onClick={() => setOpen(true)}
                     sx={{
-                      gridColumn: 'span 1',
-                      justifySelf: 'end',
                       color: darkMode ? '#fff' : ''
                     }}
                     >
@@ -321,8 +335,6 @@ export default function OverviewPacients() {
                   </Tooltip>
                   
                 </Box>
-              
-              
             </Box>
 
             <ModalRegistePacient 

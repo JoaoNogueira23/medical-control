@@ -6,7 +6,7 @@ import CertificateMedicalPage from '../pages/OverviewCertificateMedical';
 
 const routes: RouteType[] = [
     {
-        title: 'Home',
+        title: 'Visão Geral',
         path: '/',
         element: <HomePage/>
     },

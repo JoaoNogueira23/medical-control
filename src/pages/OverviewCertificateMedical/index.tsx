@@ -3,6 +3,7 @@ import Page from "../../layouts/Page";
 import {
     DataGrid,
     GridColDef,
+    GridRowClassNameParams,
     GridToolbar
 } from '@mui/x-data-grid';
 import { Box, Button, Tooltip, Typography } from "@mui/material";
@@ -56,6 +57,17 @@ export default function CertificateMedicalPage() {
           headerName: 'Nome',
           width: 250,
           editable: false,
+          headerAlign: 'center',
+          align: 'center'
+        },
+        {
+          field: 'differenceDays',
+          headerName: 'Dias Restantes',
+          width: 150,
+          type: 'number',
+          headerAlign: 'center',
+          align: 'center',
+          editable: false,
         },
         {
           field: 'start_date',
@@ -63,6 +75,8 @@ export default function CertificateMedicalPage() {
           type: 'string',
           width: 200,
           editable: false,
+          align: 'center',
+          headerAlign: 'center',
         },
         {
           field: 'end_date',
@@ -70,15 +84,30 @@ export default function CertificateMedicalPage() {
           type: 'string',
           width: 200,
           editable: false,
+          align: 'center',
+          headerAlign: 'center',
         },
         {
             field: 'describe',
             headerName: 'Descrição',
             type: 'string',
+            headerAlign: 'center',
+            align: 'center',
             width: 350,
             editable: false,
         },
     ];
+
+    const datagridStyle = {
+        width: '80vw',
+        marginBottom: '2rem',
+        '.row-class-urgent':{
+          backgroundColor: '#FF9688'
+        },
+        '.row-class-middle':{
+          backgroundColor: '#F7C70D'
+        }
+    }
   
 
     return(
@@ -97,21 +126,32 @@ export default function CertificateMedicalPage() {
 
             <Box
             sx={{
-              display: 'flex',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
               width: '80vw',
               marginTop: '2rem',
-              gap: 4,
+              gap: 2,
               justifyContent: 'space-between',
+              alignContent: 'center',
+              alignItems: 'center'
             }}
             >
               <Typography 
               fontWeight={700}
+              sx={{
+                gridColumn: '2/3',
+              }}
+              align='center'
+              variant='h5'
               >
                   {"Atestados Médicos"}
               </Typography>
 
               <Tooltip
               title={'Cadastro de atestado'}
+              sx={{
+                gridColumn: '1/3'
+              }}
               >
                 <Button onClick={() => setOpen(true)}
                 sx={{
@@ -129,15 +169,20 @@ export default function CertificateMedicalPage() {
            
 
             <DataGrid
-            sx={{
-                width: '80vw',
-                marginBottom: '2rem'
-            }}
+            sx={datagridStyle}
             columns={columns}
             rows={medicalCertificate}
             getRowHeight={() => 'auto'}
             loading={loading}
             slots={{toolbar: GridToolbar}}
+            getRowClassName={(params: GridRowClassNameParams<any>): string => {
+              if(params.row.differenceDays == 1){
+                return 'row-class-urgent'
+              }else if(params.row.differenceDays == 2 ){
+                return 'row-class-middle'
+              }
+              return ''
+            }}
             initialState={
               {
                 columns:{
