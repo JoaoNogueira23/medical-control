@@ -21,7 +21,7 @@ interface SideBarProps extends BoxProps{
     handleMenu: () => void
 }
 
-const SideBar = ({items, routes, mobileDevice, handleMenu, children, ...rest}: SideBarProps & PropsWithChildren) => {
+const SideBar = ({routes, mobileDevice, handleMenu, children}: SideBarProps & PropsWithChildren) => {
     const [currentRoute, setCurrentRoute] = useState(window.location.pathname)
 
     const navigate = useNavigate()
@@ -60,7 +60,7 @@ const SideBar = ({items, routes, mobileDevice, handleMenu, children, ...rest}: S
         sx={mobileDevice ? styleMobile : stylePattern}
         >
             {
-                routes && routes.map(({title, icon, path}, key) => (
+                routes && routes.map(({title, path}, key) => (
                     <ToolTip key={key} title={title}>
                         <Button
                         onClick={() => currentRoute != path && handleSetRoute(path ?? '/')}

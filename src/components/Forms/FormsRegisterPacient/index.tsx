@@ -285,6 +285,7 @@ export default function FormsResgisterPacient({handleClose}: ModalProps) {
                             justifySelf: 'center'
                         }}
                         autoFocus
+                        multiline
                         label={'histórico Médico'}
                         {...register('historical')}
                         helperText={errors.historical?.message}

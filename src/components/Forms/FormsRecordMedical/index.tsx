@@ -133,17 +133,16 @@ export default function FormsRecordMedical({handleClose}: PropsModal) {
             <Controller
             control={control}
             name={'describe'}
-            rules={{
-            }}
             render={(_params) => {
                 return(
                     <TextField
                     sx={{
                         position: 'relative',
                         width: '40vw',
-                        justifySelf: 'center'
+                        justifySelf: 'center',
                     }}
                     autoFocus
+                    multiline
                     label={'Descrição'}
                     {...register('describe')}
                     helperText={errors.describe?.message}
