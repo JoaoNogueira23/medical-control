@@ -3,6 +3,7 @@ import Page from "../../layouts/Page";
 import {
     DataGrid,
     GridColDef,
+    GridRenderCellParams,
     GridRowClassNameParams,
     GridToolbar
 } from '@mui/x-data-grid';
@@ -13,7 +14,14 @@ import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import axios from "axios";
 import useAppContext from "../../hooks/useAppContext";
 import useDataContext from "../../hooks/useDataContext";
+import SendIcon from '@mui/icons-material/Send';
 
+
+type payloadSendEmailType = {
+  name: string;
+  emailList: string;
+  end_date: string;
+}
 
 export default function CertificateMedicalPage() {
     const alert = useSnackBar()
@@ -49,12 +57,53 @@ export default function CertificateMedicalPage() {
       }
     }, [])
 
+    const handleSendEmail = async (data: payloadSendEmailType) => {
+      const urlRequest = apiURL + '/utilities/send-email'
+      await axios.post(urlRequest, data)
+          .then(_response => {
+              alert("E-mail enviado com sucesso!")
+
+          })
+          .catch(err => {
+              console.log(err)
+              alert('Erro no envio de e-mail!', {type: 'error'})
+          })
+          .finally(() => setLoading(false))
+    }
+
   
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'id', width: 90 },
         {
+          field: 'actions',
+          headerName: 'Enviar E-mail',
+          renderCell: (params: GridRenderCellParams<any>) => {
+            let data = {
+              name: params.row.name,
+              emailList: params.row.emailList,
+              end_date: params.row.end_date
+            }
+            return(
+              <Button
+              onClick={() => handleSendEmail(data)}
+              >
+                  <SendIcon />
+              </Button>
+            )
+            
+          },
+        },
+        {
           field: 'name',
           headerName: 'Nome',
+          width: 250,
+          editable: false,
+          headerAlign: 'center',
+          align: 'center'
+        },
+        {
+          field: 'emailList',
+          headerName: 'E-mail(s)',
           width: 250,
           editable: false,
           headerAlign: 'center',
@@ -187,7 +236,8 @@ export default function CertificateMedicalPage() {
               {
                 columns:{
                   columnVisibilityModel: {
-                    id: false
+                    id: false,
+                    emnailList: false
                   }
                 },
                 sorting: {
