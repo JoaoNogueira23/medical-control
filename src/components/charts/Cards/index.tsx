@@ -1,5 +1,4 @@
 import { Box, CircularProgress, Typography } from "@mui/material"
-import useDarkMode from "../../../hooks/useDarkMode"
 import useAppContext from "../../../hooks/useAppContext"
 
 type PropsCard ={
