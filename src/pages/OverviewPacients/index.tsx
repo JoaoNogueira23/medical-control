@@ -270,6 +270,16 @@ export default function OverviewPacients() {
       setRowModesModel(newRowModesModel);
     };
 
+    const [currentWindow, setCurrentWindow] = useState<number>(window.innerWidth)
+
+    const resizeWindow = () => {
+      setCurrentWindow(window.innerWidth)
+    }
+
+    window.addEventListener('resize', () => {
+        resizeWindow()
+    })
+
     return(
         <Page
         sx={{
@@ -294,13 +304,13 @@ export default function OverviewPacients() {
                 <Box
                 sx={{
                   gridColumn: '1/4',
-                  gridRow: '2/2'
+                  gridRow: '2/3'
                 }}
                 >
                   <Typography 
                   fontWeight={700}
                   align='center'
-                  variant='h5'
+                  variant={currentWindow < 700 ? 'h6' : 'h5'}
                   >
                       {"Visão Geral Pacientes"}
                   </Typography>
@@ -310,7 +320,7 @@ export default function OverviewPacients() {
                 <Box
                 sx={{
                   gridColumn: '3',
-                  gridRow: '2/2',
+                  gridRow: '2/3',
                   display: 'flex',
                   justifyContent: 'flex-end',
                   gap: 1,  

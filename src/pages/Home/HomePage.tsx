@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material"
+import { Box } from "@mui/material"
 import { useEffect, useState } from "react"
 import useAppContext from "../../hooks/useAppContext"
 import axios from "axios"
@@ -25,6 +25,7 @@ export default function HomePage(){
     })
 
     const requestDataCharts = async () => {
+        setLoading(true)
         const urlRequest = apiURL + '/charts/data-cards'
 
         await axios.get(urlRequest)
@@ -39,7 +40,11 @@ export default function HomePage(){
               alert('Erro no processamento das métricas!', {type: 'error'})
           })
           .finally(() => 
-            setLoading(false)
+            setTimeout(() => {
+                setLoading(false)
+            }, 
+            5000)
+            
         )
     }
 
@@ -65,10 +70,7 @@ export default function HomePage(){
                 gap: 2
             }}
             >
-                {loading ? (
-                    <CircularProgress />
-                ) : 
-                (
+                {
                     cardsData.map((item: cardType) => (
                         <Card
                         loading={loading}
@@ -76,10 +78,10 @@ export default function HomePage(){
                         number={item.value}
                         />
                     ))
-                )
                 }
                 
             </Box>  
         </Box>
+        
     )
 }

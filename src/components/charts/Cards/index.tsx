@@ -1,5 +1,6 @@
 import { Box, CircularProgress, Typography } from "@mui/material"
 import useDarkMode from "../../../hooks/useDarkMode"
+import useAppContext from "../../../hooks/useAppContext"
 
 type PropsCard ={
     title: string
@@ -9,7 +10,7 @@ type PropsCard ={
 
 
 export default function Card({title, number, loading}: PropsCard) {
-    const {darkMode} = useDarkMode()
+    const {darkMode} = useAppContext()
 
     return(
         <Box
@@ -23,7 +24,7 @@ export default function Card({title, number, loading}: PropsCard) {
             position: 'relative',
             flexDirection: 'column',
             gap: '1rem',
-            color: darkMode ? '#fff' : '#141414',
+            color: darkMode ? '#FFFFFF' : 'black',
             textAlign: 'center',
             width: '15rem',
             height: '6rem',
@@ -34,11 +35,21 @@ export default function Card({title, number, loading}: PropsCard) {
         }}
         >
             {loading ? (
-                <CircularProgress />
+                <CircularProgress sx={{
+                    alignSelf: 'center',
+                    justifySelf: 'center'
+                }}/>
             ) : (
                 <Box key={`item-${Math.random()}`}>
-                    <Typography variant="h5" >{title}</Typography>
-                    <Typography variant="h6" >{number}</Typography>
+                    <Typography 
+                    variant="h5">
+                        {title}
+                    </Typography>
+                    <Typography 
+                    variant="h6" 
+                    >
+                        {number}
+                    </Typography>
                 </Box>
             )
             }
